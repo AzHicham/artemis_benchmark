@@ -16,7 +16,7 @@ jobs:
         run: |
             TOTAL_RUN=$(cat benchmark.json| jq '[.. | objects | .mean] | add' )
             echo $TOTAL_RUN
-            cat benchmark.json | jq '.benchmarks |= [{"group": "IdfM", "name": "global_test", "fullname": "artemis/global_test", "params": null, "param": null, "extra_info": {}, "stats": { "mean" : "'"$TOTAL_RUN"'" } }] + .' >> benchmark_edit.json
+            cat benchmark.json | jq '.benchmarks |= [{"group": "IdfM", "name": "global_test", "fullname": "artemis/global_test", "params": null, "param": null, "extra_info": {}, "stats": { "mean" : "'"$TOTAL_RUN"'" }, "rounds" : 1 }] + .' >> benchmark_edit.json
       - name: Store benchmark result
         uses: AzHicham/github-action-benchmark@v2
         with:

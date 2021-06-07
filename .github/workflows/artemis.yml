@@ -18,7 +18,7 @@ jobs:
             TOTAL_RUN=$(cat benchmark.json| jq '[.. | objects | .mean] | add' )
             OPS=$(echo "scale=10; 1.0 /  $TOTAL_RUN " | bc)
             STD_DEV=$(echo "scale=10; 0.1 /  $TOTAL_RUN " | bc)
-            cat benchmark.json | jq '.benchmarks |= [{"group": "IdfM", "name": "global_test", "fullname": "artemis/global_test", "params": null, "param": null, "extra_info": {}, "stats": { "ops" : "'"$OPS"'", "mean" : "'"$TOTAL_RUN"'", "rounds" : 1, "stddev" : "'"$STD_DEV"'" }  }] + .' >> benchmark_edit.json
+            cat benchmark.json | jq '.benchmarks |= [{"group": "IdfM", "name": "artemis/global_test_", "fullname": "artemis/global_test_", "params": null, "param": null, "extra_info": {}, "stats": { "ops" : "'"$OPS"'", "mean" : "'"$TOTAL_RUN"'", "rounds" : 1, "stddev" : "'"$STD_DEV"'" }  }] + .' >> benchmark_edit.json
       - name: Store benchmark result
         uses: AzHicham/github-action-benchmark@v2
         with:

@@ -1,15 +1,21 @@
 name: Artemis
 
 on:
- repository_dispatch:
-    types: [bench-report]
-
+  pull_request:
+  push:
+    branches:
+      - dev
+    
 jobs:
   run:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Compute Global benchmark
+        run: |
+            TOTAL_RUN=$(cat benchmark.json| jq '[.. | objects | .mean] | add' )
+            cat benchmark.json | jq '.benchmarks += [{"group": "IdfM", "name": "global_test", "fullname": "global_test", "params": null, "param": null, "extra_info": {}, "stats": { "mean" : "'"5TOTAL_RUN"'" }]' >> benchmark_edit.json
       - name: Store benchmark result
         uses: AzHicham/github-action-benchmark@v2
         with:
@@ -18,7 +24,7 @@ jobs:
           auto-push: true
           gh-pages-branch: 'gh-pages'
           benchmark-data-dir-path: '.'
-          output-file-path: benchmark.json
+          output-file-path: benchmark_edit.json
           fail-on-alert: true
           alert-threshold: '150%'
           comment-on-alert: true
